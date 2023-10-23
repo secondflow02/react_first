@@ -1,0 +1,86 @@
+React의 작동원리
+Virtual DOM을 사용하여 UI를 빠르게 랜더링한다.
+Virtual DOM은 이전 UI 상태를 메모리에 유지해서, 변경될 UI의 최소 집합을 계산하는 로직을 포함한다.
+단방향 데이터 흐름(Flux)을 갖는다.
+
+
+React의 장단점
+[장점]
+  가상 DOM => 실제 DOM의 복사본
+    - 가상 DOM을 수정하고 필요한 변경 사항만 실제 DOM에 적용 (State)
+  ReRender
+    - State가 바뀌면 해당 부분만 Re Render
+  Component
+    - 모듈화, 조각
+    - 각각의 Component를 조립하여 페이지 생성
+    - Component가 스스로 상태 관리
+  Client side Rendering
+    - 사용자가 웹사이트에 접속했을 때 모든 페이지에 대한 데이터를 다운로드함으로 초기 랜더링은 느리지만,
+      이후에는 상태가 변경된 부분만을 랜더링하여 효율적이고 화면 전환이 빠르다.
+  성능이 뛰어난 가비지 컬렉터와 메모리 관리 기능을 지원한다.
+  UI 수정과 재사용성이 좋으며, 코드의 가독성을 높일 수 있다.
+  다른 Framework나 라이브러리와 병행해서 사용할 수 있다.
+
+[단점]
+  IE8 이하의 버전은 지원하지 않는다.
+  view 이외의 기능은 직접 구현하거나 라이브러리를 사용해서 구현해야 하기때문에 javascript 배경지식이 필수 선행되어야 한다.
+  데이터 모델링, 라우팅, Ajax 등 기능 지원이 안된다.
+  위 CSR 에서 말했다싶이 초기 다운로드 시 랜더링 시간이 길다.
+
+----------------------------------------------------
+
+React 장점 관련 예시
+[쇼핑몰 홈페이지 장바구니 항목 추가/삭제]
+- 추가된 상품이 있을 경우 기존에 담아놓은 상품은 그대로 두고 새로 추가된 항목에 대해서만 랜더링
+
+1. 장바구니 항목을 나타내는 컴포넌트 생성
+Cart = 장바구니, CartItem = 항목
+
+2. 장바구니 항목 상태 관리 => 상태.. useState
+
+import React, { useState } from 'react';
+
+function Cart() {
+  const [cartItems, setCartItems] = useState([]);
+
+  // 장바구니 항목 추가
+  const addToCart = (item) => {
+    setCartItems([...cartItems, item]);
+  };
+
+  // 장바구니 항목 삭제
+  const removeFromCart = (itemIndex) => {
+    const updatedCart = [...cartItems];
+    updatedCart.splice(itemIndex, 1);
+    setCartItems(updatedCart);
+  };
+
+  return (
+    <div>
+      <button onClick={() => addToCart('상품1')}>장바구니 추가</button>
+      <ul>
+        {cartItems.map((item, index) => (
+          <CartItem
+            key={index}
+            item={item}
+            removeItem={() => removeFromCart(index)}
+          />
+        )}
+      </ul>
+    </div>
+  );
+}
+
+function CartItem({ item, removeItem }) {
+  return (
+    <li>
+      {item}
+      <button onClick={removeItem}>삭제</button>
+    </li>
+  );
+}
+
+export default Cart;
+
+3. 변경된 상태만 리랜더링
+=> 추가된 항목만 다시 그립니다.
