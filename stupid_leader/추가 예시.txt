@@ -1,0 +1,26 @@
+인스타 스토리 의 경우 
+box 를 집어넣을 footer의component,box 형식의 Component
+1. 장바구니 항목을 나타내는 컴포넌트 생성
+main =기본화면, box = 항목
+2. footer 안에서 box를 입력받을때
+import Box from "./Box"
+function APP(){
+    return(
+        <main>
+            <Box id = "inst_id"  profile = "inst_profile" link = "inst_profile">
+            <Box id = "inst_id"  profile = "inst_profile" link = "inst_profile">
+            <Box id = "inst_id"  profile = "inst_profile" link = "inst_profile">
+            <Box id = "inst_id"  profile = "inst_profile" link = "inst_profile">
+        ...
+        </main>
+    )
+}
+
+export default App;
+3.box 형식
+<div className="box">
+    Box{props.profile}
+    {props.id}
+    <onClick ={props.link}>
+</div>
+export default Box
